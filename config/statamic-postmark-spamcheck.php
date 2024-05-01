@@ -6,6 +6,6 @@ return [
     'fail_silently' => true,
 
     'test_mode' => env('STATAMIC_POSTMARK_SPAMCHECK_TEST_MODE', 'off'),
-    
+
     'threshold' => 5,
 ];

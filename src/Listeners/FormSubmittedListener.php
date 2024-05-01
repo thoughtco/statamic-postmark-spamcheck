@@ -42,31 +42,31 @@ class FormSubmittedListener
         $content = $form->blueprint()
             ->fields()->all()
             ->filter(fn ($field) => $field->type() == 'textarea' || ($field->type() == 'text' && $field->get('input_type', '') != 'email'))
-            ->map(function ($field) use ($apiKey, $submission) {
+            ->map(function ($field) use ($submission) {
                 return $submission->get($field->handle());
             })
             ->filter()
             ->join("\n");
-            
+
         if (! $content) {
             return;
         }
-            
+
         $email = $form->blueprint()
             ->fields()->all()
             ->filter(fn ($field) => $field->type() == 'text' && $field->get('input_type', '') != 'email')
-            ->map(function ($field) use ($apiKey, $submission) {
+            ->map(function ($field) use ($submission) {
                 return $submission->get($field->handle());
             })
             ->filter()
             ->first() ?? '';
-                        
+
         $body = view('statamic-postmark-spamcheck::email', [
             'content' => $content,
             'date' => now(),
             'email' => $email,
         ])->render();
-                
+
         $response = Http::withHeaders(['apikey' => $apiKey])
             ->withBody($content, 'text/plain')
             ->post('https://spamcheck.postmarkapp.com/filter', [
@@ -75,22 +75,22 @@ class FormSubmittedListener
             ]);
 
         $json = $response->json();
-        
+
         // handle postmark error
         if (! ($json['success'] ?? false)) {
             return;
         }
-                
+
         if ($score = Arr::get($json, 'score', false)) {
 
             if ($score >= config('statamic-postmark-spamcheck.threshold')) {
                 if (config('statamic-postmark-spamcheck.fail_silently')) {
                     return false;
                 }
-    
+
                 $this->throwFailure();
             }
-       }
+        }
     }
 
     public function throwFailure()

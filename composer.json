@@ -24,5 +24,8 @@
                 "Thoughtco\\StatamicPostmarkSpamcheck\\ServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0"
     }
 }
