@@ -20,7 +20,7 @@ A basic text email body is passed to the Postmark API, if you want to override t
 
 `php artisan vendor:publish --tag=statamic-postmark-spamcheck-views`
 
-The publishe file will be found in `resources/views/vendor/statamic-postmark-spamcheck`
+The published file will be found in `resources/views/vendor/statamic-postmark-spamcheck`
 
 
 ## Testing during development
