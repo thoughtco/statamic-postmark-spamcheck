@@ -47,10 +47,24 @@ class FormSubmittedListener
             })
             ->filter()
             ->join("\n");
+            
+        if (! $content) {
+            return;
+        }
+            
+        $email = $form->blueprint()
+            ->fields()->all()
+            ->filter(fn ($field) => $field->type() == 'text' && $field->get('input_type', '') != 'email')
+            ->map(function ($field) use ($apiKey, $submission) {
+                return $submission->get($field->handle());
+            })
+            ->filter()
+            ->first() ?? '';
                         
         $body = view('statamic-postmark-spamcheck::email', [
-            'date' => now(),
             'content' => $content,
+            'date' => now(),
+            'email' => $email,
         ])->render();
                 
         $response = Http::withHeaders(['apikey' => $apiKey])

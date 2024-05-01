@@ -2,5 +2,6 @@ Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: quoted-printable
 Mime-Version: 1.0 (1.0)
 Date: {{ date | format('r') }}
+{{ if email }}From: {{ email }}{{ /if }}
     
 {{ content }}
