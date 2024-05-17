@@ -67,8 +67,7 @@ class FormSubmittedListener
             'email' => $email,
         ])->render();
 
-        $response = Http::withHeaders(['apikey' => $apiKey])
-            ->withBody($content, 'text/plain')
+        $response = Http::withBody($content, 'text/plain')
             ->post('https://spamcheck.postmarkapp.com/filter', [
                 'email' => $body,
                 'options' => 'short',
